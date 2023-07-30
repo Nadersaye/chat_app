@@ -27,17 +27,13 @@ class LoginPage extends StatelessWidget {
       listener: (context, state) {
         if (state is LoginLoadingState) {
           isLoading = true;
-        }
-        else if (state is LoginSuccessState) {
-          Navigator.pushNamed(context, ChatPage.id,
-                                arguments: email);
+        } else if (state is LoginSuccessState) {
+          Navigator.pushNamed(context, ChatPage.id, arguments: email);
+          isLoading = false;
+        } else if (state is LoginFailureState) {
+          showSnackBar(context, state.message);
           isLoading = false;
         }
-        else if (state is LoginFailureState) {
-          showSnackBar(context,state.message);
-          isLoading = false;
-        }
-
       },
       builder: (context, state) {
         return ModalProgressHUD(
@@ -109,9 +105,9 @@ class LoginPage extends StatelessWidget {
                     CustomButon(
                       onTap: () async {
                         if (formKey.currentState!.validate()) {
-                          BlocProvider.of<AuthenBloc>(context).add(LoginUser(email: email!, password: password!));
-                        } 
-                        else {}
+                          BlocProvider.of<AuthenBloc>(context).add(
+                              LoginUser(email: email!, password: password!));
+                        } else {}
                       },
                       text: 'LOGIN',
                     ),
